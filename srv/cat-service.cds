@@ -2,12 +2,16 @@ using my.bookshop as my from '../db/data-model';
 
 @path : 'bookservice'
 @protocol : 'rest'
-@(requires: 'book-admin')
+@requires : 'book-admin'
 service CatalogService
 {
-    function health () returns Boolean;
+    function health
+    (
+    )
+    returns Boolean;
+
     entity Authors as
-        projection on my.Authors ;
+        projection on my.Authors;
 
     entity Books as
         projection on my.Books
@@ -21,7 +25,15 @@ service CatalogService
             createdBy,
             modifiedBy,
             stock
-        }actions {
-        function getStock() returns Integer;
-    };
+        }
+        actions
+        {
+            function getStock
+            (
+            )
+            returns Integer;
+        };
+
+    entity Suppliers as
+        projection on my.Suppliers;
 }
