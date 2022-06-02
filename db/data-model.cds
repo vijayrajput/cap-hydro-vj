@@ -4,7 +4,7 @@ using { managed } from '@sap/cds/common';
 
 entity Books : managed
 {
-    key ID : Integer;
+    key ID : UUID;
     @cds.api.ignore
     author : Association to one Authors;
     title : String;
