@@ -9,6 +9,7 @@ entity Books : managed {
                 
         title    : String;
         stock    : Integer;
+        virtual criticality : Integer;
         genre    : Genres
                    @assert.range;
         supplier : Association to one Suppliers;

@@ -3,7 +3,7 @@ module.exports = async function(){
     const {Books, Authors} = this.entities;
     const bupa = await cds.connect.to('API_BUSINESS_PARTNER');
     this.after ('READ','Books', each => {
-        if (each.availiableStock > 111) each.title += ` -- 11% discount!`
+        each.availiableStock > 50 ? each.criticality = 3 : each.criticality = 2
       })
 
     this.on ('health', () => true)  

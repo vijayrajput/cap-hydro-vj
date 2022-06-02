@@ -23,6 +23,13 @@ annotate service.Books with @(
             Label : 'Author Name',
             Value : authorName,
         },
+        {
+            $Type : 'UI.DataField',
+            Value : availiableStock,
+            Label : 'Availiable Stock',
+            Criticality : criticality,
+            CriticalityRepresentation : #WithIcon,
+        },
     ]
 );
 annotate service.Books with @(
