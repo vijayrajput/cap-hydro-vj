@@ -75,7 +75,8 @@
                 "sap.m": {},
                 "sap.ui.core": {},
                 "sap.ushell": {},
-                "sap.fe.templates": {}
+                "sap.fe.templates": {},
+                "sap.f": {}
             }
         },
         "contentDensities": {
@@ -108,17 +109,21 @@
             "css": []
         },
         "routing": {
-            "config": {},
             "routes": [
                 {
                     "pattern": ":?query:",
                     "name": "BooksList",
-                    "target": "BooksList"
+                    "target": [
+                        "BooksList"
+                    ]
                 },
                 {
                     "pattern": "Books({key}):?query:",
                     "name": "BooksObjectPage",
-                    "target": "BooksObjectPage"
+                    "target": [
+                        "BooksList",
+                        "BooksObjectPage"
+                    ]
                 }
             ],
             "targets": {
@@ -137,9 +142,20 @@
                                         "route": "BooksObjectPage"
                                     }
                                 }
+                            },
+                            "controlConfiguration": {
+                                "@com.sap.vocabularies.UI.v1.LineItem": {
+                                    "actions": {
+                                        "DataFieldForAction::CatalogService.getStock": {
+                                            "enableOnSelect": "single"
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
+                    },
+                    "controlAggregation": "beginColumnPages",
+                    "contextPattern": ""
                 },
                 "BooksObjectPage": {
                     "type": "Component",
@@ -150,9 +166,24 @@
                             "editableHeaderContent": false,
                             "entitySet": "Books"
                         }
-                    }
+                    },
+                    "controlAggregation": "midColumnPages",
+                    "contextPattern": "/Books({key})"
                 }
+            },
+            "config": {
+                "flexibleColumnLayout": {
+                    "defaultTwoColumnLayoutType": "TwoColumnsBeginExpanded",
+                    "defaultThreeColumnLayoutType": "ThreeColumnsMidExpanded"
+                },
+                "routerClass": "sap.f.routing.Router"
             }
+        },
+        "rootView": {
+            "viewName": "sap.fe.templates.RootContainer.view.Fcl",
+            "type": "XML",
+            "async": true,
+            "id": "appRootView"
         }
     },
     "sap.fiori": {

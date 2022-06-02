@@ -7,21 +7,25 @@ annotate service.Books with @(
             $Type : 'UI.DataField',
             Label : 'Title',
             Value : title,
+            ![@UI.Importance] : #High,
         },
         {
             $Type : 'UI.DataField',
             Label : 'Genre',
             Value : genre,
+            ![@UI.Importance] : #Low,
         },
         {
             $Type : 'UI.DataField',
             Label : 'Supplier',
             Value : supplier_ID,
+            ![@UI.Importance] : #Medium,
         },
         {
             $Type : 'UI.DataField',
             Label : 'Author Name',
             Value : authorName,
+            ![@UI.Importance] : #High,
         },
         {
             $Type : 'UI.DataField',
@@ -29,6 +33,12 @@ annotate service.Books with @(
             Label : 'Availiable Stock',
             Criticality : criticality,
             CriticalityRepresentation : #WithIcon,
+            ![@UI.Importance] : #High,
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Action : 'CatalogService.getStock',
+            Label : 'Check Stock',
         },
     ]
 );
@@ -54,8 +64,10 @@ annotate service.Books with @(
             },
             {
                 $Type : 'UI.DataField',
-                Label : 'availiableStock',
+                Label : 'Availiable Stock',
                 Value : availiableStock,
+                Criticality : criticality,
+                CriticalityRepresentation : #WithIcon,
             },
             {
                 $Type : 'UI.DataField',
@@ -68,7 +80,7 @@ annotate service.Books with @(
         {
             $Type : 'UI.ReferenceFacet',
             ID : 'GeneratedFacet1',
-            Label : 'General Information',
+            Label : 'Book Information',
             Target : '@UI.FieldGroup#GeneratedGroup1',
         },
     ]
@@ -101,4 +113,16 @@ annotate service.Books with {
             $value : author.name,
             ![@UI.TextArrangement] : #TextFirst,
         }
+};
+annotate service.Books with @(
+    UI.SelectionFields : []
+);
+annotate service.Books with {
+    title @Common.Label : 'title'
+};
+annotate service.Books with {
+    availiableStock @Common.FieldControl : #Mandatory
+};
+annotate service.Books with {
+    title @Common.FieldControl : #Mandatory
 };
