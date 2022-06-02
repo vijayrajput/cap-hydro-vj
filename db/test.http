@@ -1,5 +1,5 @@
 ###
-GET http://localhost:36841/bookservice/Books
+GET http://localhost:4004/bookservice/Books
 Authorization: Basic test1:password
 
 ###
@@ -14,3 +14,11 @@ Content-Type: application/json
     "genre": "Comic3",
     "availiableStock": 167
   }
+
+###
+GET http://localhost:4004/bookservice/health
+Authorization: Basic test1:password
+
+###
+GET http://localhost:4004/bookservice/Books/43c139cf-ec12-4b02-814a-8aa2386811e0/getStock
+Authorization: Basic test1:password
