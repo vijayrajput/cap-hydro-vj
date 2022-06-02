@@ -1,0 +1,16 @@
+###
+GET http://localhost:36841/bookservice/Books
+Authorization: Basic test1:password
+
+###
+POST http://localhost:4004/bookservice/Books
+Content-Type: application/json
+
+{
+
+    "ID": 503,
+    "author_ID": 101,
+    "title": "New Book",
+    "genre": "Comic3",
+    "availiableStock": 167
+  }
