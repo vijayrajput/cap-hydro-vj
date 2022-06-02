@@ -1,23 +1,23 @@
 {
-  "scopes": [
-    {
-      "name": "$XSAPPNAME.book-admin",
-      "description": "book-admin"
-    },
-    {
-        "name": "uaa.user",
-        "description": "UAA"
+    "scopes": [
+      {
+        "name": "$XSAPPNAME.book-admin",
+        "description": "book-admin"
+      },
+      {
+          "name": "uaa.user",
+          "description": "UAA"
+        }
+    ],
+    "attributes": [],
+    "role-templates": [
+      {
+        "name": "book-admin",
+        "description": "generated",
+        "scope-references": [
+          "$XSAPPNAME.book-admin","uaa.user"
+        ],
+        "attribute-references": []
       }
-  ],
-  "attributes": [],
-  "role-templates": [
-    {
-      "name": "book-admin",
-      "description": "generated",
-      "scope-references": [
-        "$XSAPPNAME.book-admin","uaa.user"
-      ],
-      "attribute-references": []
-    }
-  ]
-}
+    ]
+  }
