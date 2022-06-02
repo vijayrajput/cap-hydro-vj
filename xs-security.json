@@ -3,7 +3,11 @@
     {
       "name": "$XSAPPNAME.book-admin",
       "description": "book-admin"
-    }
+    },
+    {
+        "name": "uaa.user",
+        "description": "UAA"
+      }
   ],
   "attributes": [],
   "role-templates": [
@@ -11,7 +15,7 @@
       "name": "book-admin",
       "description": "generated",
       "scope-references": [
-        "$XSAPPNAME.book-admin"
+        "$XSAPPNAME.book-admin","uaa.user"
       ],
       "attribute-references": []
     }
