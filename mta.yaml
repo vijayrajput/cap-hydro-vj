@@ -1,69 +1,116 @@
-_schema-version: '3.1'
+_schema-version: "3.1"
 ID: cap-hydro-vj
-version: 1.0.1
 description: A simple CAP project.
+version: 1.0.1
+modules:
+- name: cap-hydro-vj-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: cap-hydro-vj-db
+  - name: cap-hydro-vj-auth
+  - name: cap-hydro-vj-destination
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    builder: npm-ci
+- name: cap-hydro-vj-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: cap-hydro-vj-db
+  parameters:
+    buildpack: nodejs_buildpack
+- name: cap-hydro-vj
+  type: approuter.nodejs
+  path: app/
+  requires:
+  - name: srv-api
+    group: destinations
+    properties:
+      forwardAuthToken: true
+      name: srv-api
+      url: ~{srv-url}
+  - name: cap-hydro-vj-auth
+  - name: cap-hydro-vj-destination
+    group: destinations
+    properties:
+      forwardAuthToken: false
+      name: ui5
+      url: https://ui5.sap.com
+  parameters:
+    disk-quota: 256M
+    keep-existing-routes: true
+    memory: 256M
+- name: cap-hydro-vj-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: cap-hydro-vj-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - managebooks.zip
+      name: managebooks
+      target-path: resources/
+- name: managebooks
+  type: html5
+  path: app/manage-books
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: cap-hydro-vj-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+- name: cap-hydro-vj-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      tenant-mode: dedicated
+      xsappname: cap-hydro-vj-${org}-${space}
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+- name: cap-hydro-vj-destination
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+    service: destination
+    service-plan: lite
+- name: cap-hydro-vj-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: cap-hydro-vj-html5-srv
+    service-plan: app-host
 parameters:
   enable-parallel-deployments: true
 build-parameters:
   before-all:
-    - builder: custom
-      commands:
-        - npx -p @sap/cds-dk cds build --production
-modules:
-  - name: cap-hydro-vj-srv
-    type: nodejs
-    path: gen/srv
-    parameters:
-      buildpack: nodejs_buildpack
-    build-parameters:
-      builder: npm-ci
-    provides:
-      - name: srv-api
-        properties:
-          srv-url: '${default-url}'
-    requires:
-      - name: cap-hydro-vj-db
-      - name: cap-hydro-vj-auth
-      - name: cap-hydro-vj-destination
-  - name: cap-hydro-vj-db-deployer
-    type: hdb
-    path: gen/db
-    parameters:
-      buildpack: nodejs_buildpack
-    requires:
-      - name: cap-hydro-vj-db
-  - name: cap-hydro-vj
-    type: approuter.nodejs
-    path: app/
-    parameters:
-      keep-existing-routes: true
-      disk-quota: 256M
-      memory: 256M
-    requires:
-      - name: srv-api
-        group: destinations
-        properties:
-          name: srv-api
-          url: '~{srv-url}'
-          forwardAuthToken: true
-      - name: cap-hydro-vj-auth
-resources:
-  - name: cap-hydro-vj-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared
-  - name: cap-hydro-vj-auth
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: xsuaa
-      service-plan: application
-      path: ./xs-security.json
-      config:
-        xsappname: 'cap-hydro-vj-${org}-${space}'
-        tenant-mode: dedicated
-  - name: cap-hydro-vj-destination
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: destination
-      service-plan: lite
+  - builder: custom
+    commands:
+    - npx -p @sap/cds-dk cds build --production
