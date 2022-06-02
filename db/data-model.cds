@@ -6,7 +6,7 @@ using API_BUSINESS_PARTNER as bupa from '../srv/external/API_BUSINESS_PARTNER.cs
 
 entity Books : managed
 {
-    key ID : Integer;
+    key ID : UUID;
     author : Association to one Authors
         @cds.api.ignore;
     title : String;
