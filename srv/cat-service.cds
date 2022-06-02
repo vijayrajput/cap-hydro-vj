@@ -5,6 +5,7 @@ using my.bookshop as my from '../db/data-model';
 @(requires: 'book-admin')
 service CatalogService
 {
+    function health () returns Boolean;
     entity Authors as
         projection on my.Authors ;
 
@@ -20,5 +21,7 @@ service CatalogService
             createdBy,
             modifiedBy,
             stock
-        };
+        }actions {
+        function getStock() returns Integer;
+    };
 }
